@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Vos offres — ConfiaRH{% endblock %}
+{% block header %}{% include "_appbar.html" %}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Vos offres d'emploi</h1>
+  <p class="muted">
+    {% if jobs %}
+      {{ jobs|length }} offre{{ 's' if jobs|length > 1 else '' }} confiée{{ 's' if jobs|length > 1 else '' }} à ConfiaRH.
+    {% else %}
+      Aucune offre n'est associée à votre compte pour le moment.
+    {% endif %}
+  </p>
+</div>
+
+{% if jobs %}
+<div class="job-grid">
+  {% for job in jobs %}
+  <a class="job-card" href="{{ url_for('applicants', job_id=job.id) }}">
+    <div class="job-card-top">
+      <h2 class="job-title">{{ job.name }}</h2>
+      {% if has_count %}
+      <span class="badge">{{ job.application_count or 0 }} candidat{{ 's' if (job.application_count or 0) != 1 else '' }}</span>
+      {% endif %}
+    </div>
+    <div class="job-meta">
+      {% if job.department_id %}<span>{{ job.department_id|rel_label }}</span>{% endif %}
+      {% if job.address_id %}<span>{{ job.address_id|rel_label }}</span>{% endif %}
+      {% if job.contract_type_id %}<span>{{ job.contract_type_id|rel_label }}</span>{% endif %}
+    </div>
+    <span class="job-link">Voir les candidats →</span>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <p>Dès qu'une offre vous sera attribuée, elle apparaîtra ici.</p>
+</div>
+{% endif %}
+{% endblock %}

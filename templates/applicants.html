@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Candidatures — ConfiaRH{% endblock %}
+{% block header %}{% include "_appbar.html" %}{% endblock %}
+
+{% block content %}
+<a class="back" href="{{ url_for('jobs') }}">← Retour aux offres</a>
+
+{% if not job %}
+<div class="empty">
+  <h1>Offre introuvable</h1>
+  <p>Cette offre n'existe pas ou n'est pas associée à votre compte.</p>
+</div>
+{% else %}
+<div class="page-head">
+  <h1>{{ job.name }}</h1>
+  <p class="muted">
+    {% if job.department_id %}{{ job.department_id|rel_label }}{% endif %}
+    {% if job.department_id and job.address_id %} · {% endif %}
+    {% if job.address_id %}{{ job.address_id|rel_label }}{% endif %}
+  </p>
+</div>
+
+{% if applicants %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Candidat</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Étape</th>
+        <th>Reçue le</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in applicants %}
+      <tr>
+        <td data-label="Candidat">{{ a.partner_name or "—" }}</td>
+        <td data-label="Email">
+          {% if a.email_from %}<a href="mailto:{{ a.email_from }}">{{ a.email_from }}</a>{% else %}—{% endif %}
+        </td>
+        <td data-label="Téléphone">{{ a.partner_phone or a.partner_mobile or "—" }}</td>
+        <td data-label="Étape">
+          {% if a.stage_id %}<span class="pill">{{ a.stage_id|rel_label }}</span>{% else %}—{% endif %}
+        </td>
+        <td data-label="Reçue le">{{ a.create_date|short_date or "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="muted small">{{ applicants|length }} candidature{{ 's' if applicants|length > 1 else '' }}.</p>
+{% else %}
+<div class="empty">
+  <p>Aucune candidature pour le moment.</p>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

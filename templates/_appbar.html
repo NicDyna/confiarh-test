@@ -1,0 +1,11 @@
+<header class="appbar">
+  <div class="appbar-inner">
+    <a class="brand" href="{{ url_for('jobs') }}">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="ConfiaRH" class="brand-logo">
+    </a>
+    <div class="appbar-right">
+      {% if company %}<span class="who">{{ company }}</span>{% endif %}
+      <a class="btn btn-ghost" href="{{ url_for('logout') }}">Se déconnecter</a>
+    </div>
+  </div>
+</header>
